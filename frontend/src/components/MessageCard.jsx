@@ -1,5 +1,26 @@
-const MessageCard = ({ content, username, createdAt }) => {
-    const isOwn = false
+import {api} from "../api/api"
+import {useMessageStore} from "../store/useMessageStore"
+import { useUserStore } from "../store/useUserStore"
+
+const MessageCard = ({id, content, username, createdAt, userId }) => {
+    const {ssesion}= useUserStore()
+    const { getMessages }= useMessageStore()
+    const handleDelete= async () => {
+        await api.deleteMessage(id)
+        await getMessages()
+    }
+    const handleLike = async() => {
+        await api.likeMessage(id)
+        await getMessages()
+    }
+
+    const handleReport = async() => {
+        await api.reportMessage(id)
+        await getMessages()
+    }
+
+    const isLiked = likeBy.some((likedUserId) => likedUserId === session.user.id)
+    const isOwn = session?.user.id === userId
     return (
         <div className="message-card">
             <div className="message-content">
